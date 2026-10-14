@@ -2,10 +2,10 @@
   "$schema": "https://versions.miabi.io/schema/v1.json",
   "component": "cli",
   "stable": {
-    "version": "0.20.0",
-    "released_at": "2026-10-10T19:29:16Z",
-    "release_url": "https://github.com/miabi-io/cli/releases/tag/v0.20.0",
+    "version": "0.20.1",
+    "released_at": "2026-10-14T09:35:46Z",
+    "release_url": "https://github.com/miabi-io/cli/releases/tag/v0.20.1",
     "reason": "bugfix",
-    "image": "miabi/cli:0.20.0"
+    "image": "miabi/cli:0.20.1"
   }
 }
