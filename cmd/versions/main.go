@@ -1,7 +1,7 @@
 // Command versions maintains the manifests served from versions.miabi.io.
 //
 //	versions bump -component agent -version v0.6.3 [-reason security] [-changelog-url URL]
-//	              [-released-at RFC3339] [-components gateway=1.1.1,agent=0.6.3] [-dir public]
+//	              [-released-at RFC3339] [-components gateway=1.1.1,agent=0.6.3] [-skip-older] [-dir public]
 //	versions index    [-dir public]
 //	versions validate [-dir public] [-previous base/public]
 package main
@@ -54,9 +54,10 @@ func bump(args []string) error {
 	changelog := fs.String("changelog-url", "", "release notes URL")
 	releasedAt := fs.String("released-at", "", "release time, RFC3339 (default now)")
 	bundle := fs.String("components", "", "tested bundle, name=version pairs (miabi only)")
+	skipOlder := fs.Bool("skip-older", false, "treat a version older than the published one as a no-op")
 	_ = fs.Parse(args)
 
-	in := versions.BumpInput{Component: *component, Version: *version, Reason: *reason, ChangelogURL: *changelog}
+	in := versions.BumpInput{Component: *component, Version: *version, Reason: *reason, ChangelogURL: *changelog, SkipOlder: *skipOlder}
 	if *releasedAt != "" {
 		t, err := time.Parse(time.RFC3339, *releasedAt)
 		if err != nil {

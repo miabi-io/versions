@@ -18,6 +18,9 @@ inputs:
   components:
     description: "miabi only: tested bundle, e.g. gateway=1.1.1,agent=0.6.2,runner=0.2.0,cli=0.20.0"
     default: ""
+  also:
+    description: "Other components released alongside, e.g. gateway=v1.1.1; published in the same pull request, skipped when older than the published version"
+    default: ""
   released-at:
     description: Release time, RFC3339 (default now)
     default: ""
@@ -50,6 +53,7 @@ runs:
         REASON: ${{ inputs.reason }}
         CHANGELOG_URL: ${{ inputs.changelog-url }}
         BUNDLE: ${{ inputs.components }}
+        ALSO: ${{ inputs.also }}
         RELEASED_AT: ${{ inputs.released-at }}
         GH_TOKEN: ${{ inputs.token }}
       run: |
@@ -59,6 +63,11 @@ runs:
         "$RUNNER_TEMP/miabi-versions" bump -dir public \
           -component "$COMPONENT" -version "$VERSION" -reason "$REASON" \
           -changelog-url "$CHANGELOG_URL" -components "$BUNDLE" -released-at "$RELEASED_AT"
+        # One pull request for everything: separate ones would all edit index.json and conflict.
+        for pair in ${ALSO//,/ }; do
+          "$RUNNER_TEMP/miabi-versions" bump -dir public -skip-older \
+            -component "${pair%%=*}" -version "${pair#*=}" -released-at "$RELEASED_AT"
+        done
         "$RUNNER_TEMP/miabi-versions" validate -dir public
 
         if git diff --quiet; then
@@ -68,8 +77,8 @@ runs:
 
         version="${VERSION#v}"
         branch="publish/${COMPONENT}-${version}"
-        git config user.name "github-actions[bot]"
-        git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+        git config user.name "akili-agent"
+        git config user.email "agent@goakili.dev"
         git checkout -b "$branch"
         git add public
         git commit -m "chore(${COMPONENT}): publish ${version}"

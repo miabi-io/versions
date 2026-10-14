@@ -44,7 +44,7 @@ var Components = []Component{
 	{Name: "agent", Repo: "miabi-io/agent", Image: "miabi/agent"},
 	{Name: "runner", Repo: "miabi-io/runner", Image: "miabi/runner"},
 	{Name: "gateway", Repo: "jkaninda/goma-gateway", Image: "jkaninda/goma-gateway"},
-	{Name: "cli", Repo: "miabi-io/cli"},
+	{Name: "cli", Repo: "miabi-io/cli", Image: "miabi/cli"},
 }
 
 // Lookup returns the named component.

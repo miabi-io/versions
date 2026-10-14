@@ -16,6 +16,9 @@ type BumpInput struct {
 	ReleasedAt   time.Time
 	// Components is the tested bundle, "name=version" pairs; only a bundling component accepts it.
 	Components map[string]string
+	// SkipOlder turns "older than the published version" into a no-op instead of an error, for a release
+	// that also carries another component (an older Miabi line pinning an older gateway).
+	SkipOlder bool
 }
 
 // Bump records a release on its channel and regenerates the index. Re-publishing the current version is
@@ -60,6 +63,9 @@ func Bump(root string, in BumpInput) (*Manifest, error) {
 	if err != nil {
 		return nil, err
 	}
+	if in.SkipOlder && isOlder(m, version) {
+		return m, nil
+	}
 	if IsPrerelease(version) {
 		if m.Stable != nil && Compare(version, m.Stable.Version) <= 0 {
 			return nil, fmt.Errorf("prerelease %s is not newer than stable %s", version, m.Stable.Version)
@@ -82,6 +88,14 @@ func Bump(root string, in BumpInput) (*Manifest, error) {
 		return nil, err
 	}
 	return m, WriteIndex(root)
+}
+
+func isOlder(m *Manifest, version string) bool {
+	if IsPrerelease(version) {
+		return (m.Stable != nil && Compare(version, m.Stable.Version) <= 0) ||
+			(m.Prerelease != nil && Compare(version, m.Prerelease.Version) < 0)
+	}
+	return m.Stable != nil && Compare(version, m.Stable.Version) < 0
 }
 
 // ParseComponents parses "gateway=1.1.1,agent=v0.6.2" into a bundle, normalising versions.

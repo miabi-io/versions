@@ -45,7 +45,7 @@ upgrade or a compatibility floor. Requests send nothing identifying beyond `User
 Add this as the last step of a component's release job, after its images are pushed:
 
 ```yaml
-- uses: miabi-io/versions@v1
+- uses: miabi-io/versions@main
   with:
     component: agent                      # miabi | agent | runner | cli
     version: ${{ github.ref_name }}       # a "-" suffix publishes to the prerelease channel
@@ -53,20 +53,16 @@ Add this as the last step of a component's release job, after its images are pus
     token: ${{ secrets.VERSIONS_TOKEN }}
 ```
 
-Miabi's workflow also publishes the bundle and the Goma version it pins:
+Miabi's workflow also publishes its tested bundle, and the gateway it pins in the same pull request
+(`also`; an older gateway than the published one is skipped):
 
 ```yaml
-- uses: miabi-io/versions@v1
+- uses: miabi-io/versions@main
   with:
     component: miabi
     version: ${{ github.ref_name }}
-    components: gateway=${{ env.GOMA_VERSION }},agent=0.6.2,runner=0.2.0,cli=0.20.0
-    token: ${{ secrets.VERSIONS_TOKEN }}
-- uses: miabi-io/versions@v1
-  if: ${{ !contains(github.ref_name, '-') }}
-  with:
-    component: gateway
-    version: ${{ env.GOMA_VERSION }}
+    components: gateway=1.1.1,agent=0.6.2,runner=0.2.0,cli=0.20.0
+    also: gateway=${{ env.GOMA_VERSION }}
     token: ${{ secrets.VERSIONS_TOKEN }}
 ```
 
