@@ -66,9 +66,9 @@ Miabi's workflow also publishes its tested bundle, and the gateway it pins in th
     token: ${{ secrets.VERSIONS_TOKEN }}
 ```
 
-The action updates the manifest, regenerates `v1/index.json`, and opens a pull request set to
-auto-merge once **Validate** passes. Re-running a release is a no-op. An older version than the
-one published is refused.
+The action updates the manifest, regenerates `v1/index.json`, and opens a pull request; the
+repository merges it once **Validate** passes. The release job does not wait for the merge.
+Re-running a release is a no-op. An older version than the one published is refused.
 
 ## Local use
 
