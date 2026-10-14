@@ -78,6 +78,10 @@ func TestBumpRefuses(t *testing.T) {
 	if _, err := Bump(root, BumpInput{Component: "agent", Version: "0.6.2", ReleasedAt: t0}); err != nil {
 		t.Errorf("re-publishing the current version must be allowed: %v", err)
 	}
+	m, err := Bump(root, BumpInput{Component: "agent", Version: "0.6.1", ReleasedAt: t0, SkipOlder: true})
+	if err != nil || m.Stable.Version != "0.6.2" {
+		t.Errorf("skip-older must leave 0.6.2 in place, got %+v, %v", m, err)
+	}
 }
 
 func TestParseComponents(t *testing.T) {
