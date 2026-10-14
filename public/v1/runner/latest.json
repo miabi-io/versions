@@ -1,0 +1,11 @@
+{
+  "$schema": "https://versions.miabi.io/schema/v1.json",
+  "component": "runner",
+  "stable": {
+    "version": "0.2.0",
+    "released_at": "2026-10-13T10:47:20Z",
+    "release_url": "https://github.com/miabi-io/runner/releases/tag/v0.2.0",
+    "reason": "bugfix",
+    "image": "miabi/runner:0.2.0"
+  }
+}

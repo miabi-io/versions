@@ -1,0 +1,11 @@
+# Cloudflare Pages response headers. Short max-age with revalidation: a release shows up within minutes,
+# and an unchanged file costs a 304.
+/v1/*
+  Cache-Control: public, max-age=300, must-revalidate
+  Access-Control-Allow-Origin: *
+  X-Content-Type-Options: nosniff
+
+/schema/*
+  Cache-Control: public, max-age=3600
+  Access-Control-Allow-Origin: *
+  X-Content-Type-Options: nosniff

@@ -1,0 +1,38 @@
+name: Validate
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    env:
+      GOWORK: "off"
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+
+      - run: go test ./...
+
+      - name: Manifests, index and downgrade guard
+        run: |
+          set -euo pipefail
+          if [ -n "${{ github.base_ref }}" ]; then
+            git worktree add ../base "origin/${{ github.base_ref }}"
+            go run ./cmd/versions validate -dir public -previous ../base/public
+          else
+            go run ./cmd/versions validate -dir public
+          fi
+
+      - name: JSON Schema
+        run: npx -y -p ajv-cli@5.0.0 -p ajv-formats@3.0.1 ajv validate --spec=draft2020 -c ajv-formats -s public/schema/v1.json -d "public/v1/**/*.json"

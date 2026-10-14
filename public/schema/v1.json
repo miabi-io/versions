@@ -1,0 +1,69 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://versions.miabi.io/schema/v1.json",
+  "title": "Miabi version manifest (v1)",
+  "description": "Either a component manifest (v1/<component>/latest.json) or the aggregate index (v1/index.json).",
+  "oneOf": [{ "$ref": "#/$defs/manifest" }, { "$ref": "#/$defs/index" }],
+  "$defs": {
+    "component": { "enum": ["miabi", "agent", "runner", "gateway", "cli"] },
+    "version": {
+      "type": "string",
+      "description": "Semver without a leading v, as used by Docker tags.",
+      "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(-[0-9A-Za-z.-]+)?(\\+[0-9A-Za-z.-]+)?$"
+    },
+    "release": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["version", "released_at", "release_url", "reason"],
+      "properties": {
+        "version": { "$ref": "#/$defs/version" },
+        "released_at": { "type": "string", "format": "date-time" },
+        "release_url": { "type": "string", "pattern": "^https://" },
+        "changelog_url": { "type": "string", "pattern": "^https://" },
+        "reason": {
+          "enum": ["bugfix", "feature", "security", "other"],
+          "description": "security means consumers should surface the update prominently."
+        },
+        "image": { "type": "string", "description": "Container image reference for this version." },
+        "components": {
+          "type": "object",
+          "description": "miabi only: the versions of the other components this release was tested with.",
+          "propertyNames": { "$ref": "#/$defs/component" },
+          "additionalProperties": { "$ref": "#/$defs/version" }
+        }
+      }
+    },
+    "channels": {
+      "type": "object",
+      "properties": {
+        "stable": { "$ref": "#/$defs/release" },
+        "prerelease": { "$ref": "#/$defs/release" }
+      }
+    },
+    "manifest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["$schema", "component"],
+      "properties": {
+        "$schema": { "const": "https://versions.miabi.io/schema/v1.json" },
+        "component": { "$ref": "#/$defs/component" },
+        "stable": { "$ref": "#/$defs/release" },
+        "prerelease": { "$ref": "#/$defs/release" }
+      }
+    },
+    "index": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["$schema", "generated_at", "components"],
+      "properties": {
+        "$schema": { "const": "https://versions.miabi.io/schema/v1.json" },
+        "generated_at": { "type": "string", "format": "date-time" },
+        "components": {
+          "type": "object",
+          "propertyNames": { "$ref": "#/$defs/component" },
+          "additionalProperties": { "$ref": "#/$defs/channels" }
+        }
+      }
+    }
+  }
+}

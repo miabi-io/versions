@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Miabi versions</title>
+  <style>
+    :root { color-scheme: light dark; font-family: system-ui, sans-serif; }
+    body { max-width: 40rem; margin: 3rem auto; padding: 0 1rem; line-height: 1.5; }
+    code { font-size: .9em; }
+  </style>
+</head>
+<body>
+  <h1>Miabi versions</h1>
+  <p>Latest releases of Miabi and its components, read by Miabi's update check and the <code>miabi</code> CLI.
+     Requests carry no identifying data.</p>
+  <ul>
+    <li><a href="/v1/index.json"><code>/v1/index.json</code></a> — every component</li>
+    <li><a href="/v1/miabi/latest.json"><code>/v1/miabi/latest.json</code></a></li>
+    <li><a href="/v1/agent/latest.json"><code>/v1/agent/latest.json</code></a></li>
+    <li><a href="/v1/runner/latest.json"><code>/v1/runner/latest.json</code></a></li>
+    <li><a href="/v1/gateway/latest.json"><code>/v1/gateway/latest.json</code></a></li>
+    <li><a href="/v1/cli/latest.json"><code>/v1/cli/latest.json</code></a></li>
+    <li><a href="/schema/v1.json"><code>/schema/v1.json</code></a> — JSON Schema</li>
+  </ul>
+  <p>Disable the update check with <code>MIABI_UPDATE_CHECK=false</code>.
+     <a href="https://docs.miabi.io">Documentation</a></p>
+</body>
+</html>

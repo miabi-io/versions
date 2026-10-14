@@ -1,0 +1,11 @@
+{
+  "$schema": "https://versions.miabi.io/schema/v1.json",
+  "component": "agent",
+  "stable": {
+    "version": "0.6.2",
+    "released_at": "2026-10-03T13:18:34Z",
+    "release_url": "https://github.com/miabi-io/agent/releases/tag/v0.6.2",
+    "reason": "bugfix",
+    "image": "miabi/agent:0.6.2"
+  }
+}

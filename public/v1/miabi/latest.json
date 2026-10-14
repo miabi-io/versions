@@ -1,0 +1,17 @@
+{
+  "$schema": "https://versions.miabi.io/schema/v1.json",
+  "component": "miabi",
+  "stable": {
+    "version": "1.10.18",
+    "released_at": "2026-10-13T18:46:14Z",
+    "release_url": "https://github.com/miabi-io/miabi/releases/tag/v1.10.18",
+    "reason": "bugfix",
+    "image": "miabi/miabi:1.10.18",
+    "components": {
+      "agent": "0.6.2",
+      "cli": "0.20.0",
+      "gateway": "1.1.1",
+      "runner": "0.2.0"
+    }
+  }
+}

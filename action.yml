@@ -1,0 +1,83 @@
+name: Publish to versions.miabi.io
+description: Records a component release on versions.miabi.io by opening an auto-merging pull request against miabi-io/versions.
+author: Miabi
+
+inputs:
+  component:
+    description: "miabi | agent | runner | gateway | cli"
+    required: true
+  version:
+    description: Released version or tag, e.g. v1.10.19 (a "-" suffix publishes to the prerelease channel)
+    required: true
+  reason:
+    description: "bugfix | feature | security | other"
+    default: bugfix
+  changelog-url:
+    description: Release notes URL (optional)
+    default: ""
+  components:
+    description: "miabi only: tested bundle, e.g. gateway=1.1.1,agent=0.6.2,runner=0.2.0,cli=0.20.0"
+    default: ""
+  released-at:
+    description: Release time, RFC3339 (default now)
+    default: ""
+  token:
+    description: Token with contents and pull-request write access to miabi-io/versions
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - uses: actions/checkout@v4
+      with:
+        repository: miabi-io/versions
+        ref: main
+        token: ${{ inputs.token }}
+        path: .miabi-versions
+
+    - uses: actions/setup-go@v5
+      with:
+        go-version-file: ${{ github.action_path }}/go.mod
+        cache: false
+
+    # Inputs reach the script through env, never ${{ }} inside `run`, so a crafted input can't inject shell.
+    - shell: bash
+      working-directory: .miabi-versions
+      env:
+        ACTION_PATH: ${{ github.action_path }}
+        COMPONENT: ${{ inputs.component }}
+        VERSION: ${{ inputs.version }}
+        REASON: ${{ inputs.reason }}
+        CHANGELOG_URL: ${{ inputs.changelog-url }}
+        BUNDLE: ${{ inputs.components }}
+        RELEASED_AT: ${{ inputs.released-at }}
+        GH_TOKEN: ${{ inputs.token }}
+      run: |
+        set -euo pipefail
+        (cd "$ACTION_PATH" && GOWORK=off go build -o "$RUNNER_TEMP/miabi-versions" ./cmd/versions)
+
+        "$RUNNER_TEMP/miabi-versions" bump -dir public \
+          -component "$COMPONENT" -version "$VERSION" -reason "$REASON" \
+          -changelog-url "$CHANGELOG_URL" -components "$BUNDLE" -released-at "$RELEASED_AT"
+        "$RUNNER_TEMP/miabi-versions" validate -dir public
+
+        if git diff --quiet; then
+          echo "versions.miabi.io already lists ${COMPONENT} ${VERSION}"
+          exit 0
+        fi
+
+        version="${VERSION#v}"
+        branch="publish/${COMPONENT}-${version}"
+        git config user.name "github-actions[bot]"
+        git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+        git checkout -b "$branch"
+        git add public
+        git commit -m "chore(${COMPONENT}): publish ${version}"
+        git push --force origin "$branch"
+
+        if ! gh pr view "$branch" --repo miabi-io/versions >/dev/null 2>&1; then
+          gh pr create --repo miabi-io/versions --base main --head "$branch" \
+            --title "chore(${COMPONENT}): publish ${version}" \
+            --body "Published by ${GITHUB_REPOSITORY} run ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}."
+        fi
+        gh pr merge "$branch" --repo miabi-io/versions --auto --squash
