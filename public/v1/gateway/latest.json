@@ -3,7 +3,7 @@
   "component": "gateway",
   "stable": {
     "version": "1.1.1",
-    "released_at": "2026-10-13T10:04:19Z",
+    "released_at": "2026-10-14T12:37:58Z",
     "release_url": "https://github.com/jkaninda/goma-gateway/releases/tag/v1.1.1",
     "reason": "bugfix",
     "image": "jkaninda/goma-gateway:1.1.1"
