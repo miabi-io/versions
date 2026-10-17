@@ -53,18 +53,21 @@ Add this as the last step of a component's release job, after its images are pus
     token: ${{ secrets.VERSIONS_TOKEN }}
 ```
 
-Miabi's workflow also publishes its tested bundle, and the gateway it pins in the same pull request
-(`also`; an older gateway than the published one is skipped):
+Miabi's workflow also records its tested bundle. Every bundled component newer than its published
+version is published in the same pull request, so a Miabi release that moves to a new gateway also
+moves `gateway.stable`; one that is not newer is left as it is:
 
 ```yaml
 - uses: miabi-io/versions@main
   with:
     component: miabi
     version: ${{ github.ref_name }}
-    components: gateway=1.1.1,agent=0.6.2,runner=0.2.0,cli=0.20.0
-    also: gateway=${{ env.GOMA_VERSION }}
+    components: gateway=1.1.2,agent=0.6.2,runner=0.2.0,cli=0.20.3
     token: ${{ secrets.VERSIONS_TOKEN }}
 ```
+
+`also` publishes other components released alongside without adding them to the bundle, with the
+same rule.
 
 The action updates the manifest, regenerates `v1/index.json`, and opens a pull request; the
 repository merges it once **Validate** passes. The release job does not wait for the merge.
