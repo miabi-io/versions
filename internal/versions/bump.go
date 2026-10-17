@@ -16,8 +16,9 @@ type BumpInput struct {
 	ReleasedAt   time.Time
 	// Components is the tested bundle, "name=version" pairs; only a bundling component accepts it.
 	Components map[string]string
-	// SkipOlder turns "older than the published version" into a no-op instead of an error, for a release
-	// that also carries another component (an older Miabi line pinning an older gateway).
+	// SkipOlder makes a version that is not newer than the published one a no-op, for a release that also
+	// carries another component: an older Miabi line pinning an older gateway, or a bundle entry that is
+	// already published, whose release date must not be rewritten.
 	SkipOlder bool
 }
 
@@ -63,7 +64,7 @@ func Bump(root string, in BumpInput) (*Manifest, error) {
 	if err != nil {
 		return nil, err
 	}
-	if in.SkipOlder && isOlder(m, version) {
+	if in.SkipOlder && notNewer(m, version) {
 		return m, nil
 	}
 	if IsPrerelease(version) {
@@ -90,12 +91,12 @@ func Bump(root string, in BumpInput) (*Manifest, error) {
 	return m, WriteIndex(root)
 }
 
-func isOlder(m *Manifest, version string) bool {
+func notNewer(m *Manifest, version string) bool {
 	if IsPrerelease(version) {
 		return (m.Stable != nil && Compare(version, m.Stable.Version) <= 0) ||
-			(m.Prerelease != nil && Compare(version, m.Prerelease.Version) < 0)
+			(m.Prerelease != nil && Compare(version, m.Prerelease.Version) <= 0)
 	}
-	return m.Stable != nil && Compare(version, m.Stable.Version) < 0
+	return m.Stable != nil && Compare(version, m.Stable.Version) <= 0
 }
 
 // ParseComponents parses "gateway=1.1.1,agent=v0.6.2" into a bundle, normalising versions.

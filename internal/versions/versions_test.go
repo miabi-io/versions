@@ -82,6 +82,15 @@ func TestBumpRefuses(t *testing.T) {
 	if err != nil || m.Stable.Version != "0.6.2" {
 		t.Errorf("skip-older must leave 0.6.2 in place, got %+v, %v", m, err)
 	}
+	later := t0.Add(time.Hour)
+	m, err = Bump(root, BumpInput{Component: "agent", Version: "0.6.2", ReleasedAt: later, SkipOlder: true})
+	if err != nil || !m.Stable.ReleasedAt.Equal(t0) {
+		t.Errorf("skip-older must not rewrite the published 0.6.2, got %+v, %v", m.Stable, err)
+	}
+	m, err = Bump(root, BumpInput{Component: "agent", Version: "0.6.3", ReleasedAt: later, SkipOlder: true})
+	if err != nil || m.Stable.Version != "0.6.3" {
+		t.Errorf("skip-older must still publish a newer version, got %+v, %v", m, err)
+	}
 }
 
 func TestParseComponents(t *testing.T) {

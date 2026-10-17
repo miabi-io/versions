@@ -54,7 +54,7 @@ func bump(args []string) error {
 	changelog := fs.String("changelog-url", "", "release notes URL")
 	releasedAt := fs.String("released-at", "", "release time, RFC3339 (default now)")
 	bundle := fs.String("components", "", "tested bundle, name=version pairs (miabi only)")
-	skipOlder := fs.Bool("skip-older", false, "treat a version older than the published one as a no-op")
+	skipOlder := fs.Bool("skip-older", false, "treat a version not newer than the published one as a no-op")
 	_ = fs.Parse(args)
 
 	in := versions.BumpInput{Component: *component, Version: *version, Reason: *reason, ChangelogURL: *changelog, SkipOlder: *skipOlder}

@@ -16,7 +16,7 @@ inputs:
     description: Release notes URL (optional)
     default: ""
   components:
-    description: "miabi only: tested bundle, e.g. gateway=1.1.1,agent=0.6.2,runner=0.2.0,cli=0.20.0"
+    description: "miabi only: tested bundle, e.g. gateway=1.1.1,agent=0.6.2,runner=0.2.0,cli=0.20.0; each one newer than its published version is published too"
     default: ""
   also:
     description: "Other components released alongside, e.g. gateway=v1.1.1; published in the same pull request, skipped when older than the published version"
@@ -63,8 +63,9 @@ runs:
         "$RUNNER_TEMP/miabi-versions" bump -dir public \
           -component "$COMPONENT" -version "$VERSION" -reason "$REASON" \
           -changelog-url "$CHANGELOG_URL" -components "$BUNDLE" -released-at "$RELEASED_AT"
-        # One pull request for everything: separate ones would all edit index.json and conflict.
-        for pair in ${ALSO//,/ }; do
+        # One pull request for everything: separate ones would all edit index.json and conflict. The
+        # bundle is published too, because the gateway has no release workflow of its own that would.
+        for pair in ${BUNDLE//,/ } ${ALSO//,/ }; do
           "$RUNNER_TEMP/miabi-versions" bump -dir public -skip-older \
             -component "${pair%%=*}" -version "${pair#*=}" -released-at "$RELEASED_AT"
         done
