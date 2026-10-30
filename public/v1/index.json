@@ -13,11 +13,11 @@
     },
     "cli": {
       "stable": {
-        "version": "0.20.4",
-        "released_at": "2026-10-25T19:56:02Z",
-        "release_url": "https://github.com/miabi-io/cli/releases/tag/v0.20.4",
+        "version": "0.20.5",
+        "released_at": "2026-10-30T21:28:11Z",
+        "release_url": "https://github.com/miabi-io/cli/releases/tag/v0.20.5",
         "reason": "bugfix",
-        "image": "miabi/cli:0.20.4"
+        "image": "miabi/cli:0.20.5"
       }
     },
     "gateway": {
