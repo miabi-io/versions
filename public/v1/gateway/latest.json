@@ -2,10 +2,10 @@
   "$schema": "https://versions.miabi.io/schema/v1.json",
   "component": "gateway",
   "stable": {
-    "version": "1.1.2",
-    "released_at": "2026-10-17T06:26:17Z",
-    "release_url": "https://github.com/jkaninda/goma-gateway/releases/tag/v1.1.2",
+    "version": "1.2.0",
+    "released_at": "2026-10-30T21:31:33Z",
+    "release_url": "https://github.com/jkaninda/goma-gateway/releases/tag/v1.2.0",
     "reason": "bugfix",
-    "image": "jkaninda/goma-gateway:1.1.2"
+    "image": "jkaninda/goma-gateway:1.2.0"
   }
 }
