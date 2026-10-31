@@ -1,6 +1,6 @@
 {
   "$schema": "https://versions.miabi.io/schema/v1.json",
-  "generated_at": "2026-10-30T21:45:39Z",
+  "generated_at": "2026-10-31T17:59:13Z",
   "components": {
     "agent": {
       "stable": {
@@ -13,11 +13,11 @@
     },
     "cli": {
       "stable": {
-        "version": "0.20.5",
-        "released_at": "2026-10-30T21:45:39Z",
-        "release_url": "https://github.com/miabi-io/cli/releases/tag/v0.20.5",
+        "version": "0.21.0",
+        "released_at": "2026-10-31T17:59:13Z",
+        "release_url": "https://github.com/miabi-io/cli/releases/tag/v0.21.0",
         "reason": "bugfix",
-        "image": "miabi/cli:0.20.5"
+        "image": "miabi/cli:0.21.0"
       }
     },
     "gateway": {
