@@ -1,6 +1,6 @@
 {
   "$schema": "https://versions.miabi.io/schema/v1.json",
-  "generated_at": "2026-11-11T11:15:31Z",
+  "generated_at": "2026-11-11T12:05:35Z",
   "components": {
     "agent": {
       "stable": {
@@ -22,24 +22,24 @@
     },
     "gateway": {
       "stable": {
-        "version": "1.2.0",
-        "released_at": "2026-10-30T21:31:33Z",
-        "release_url": "https://github.com/jkaninda/goma-gateway/releases/tag/v1.2.0",
+        "version": "1.2.1",
+        "released_at": "2026-11-11T12:05:35Z",
+        "release_url": "https://github.com/jkaninda/goma-gateway/releases/tag/v1.2.1",
         "reason": "bugfix",
-        "image": "jkaninda/goma-gateway:1.2.0"
+        "image": "jkaninda/goma-gateway:1.2.1"
       }
     },
     "miabi": {
       "stable": {
-        "version": "1.10.26",
-        "released_at": "2026-11-10T11:18:41Z",
-        "release_url": "https://github.com/miabi-io/miabi/releases/tag/v1.10.26",
+        "version": "1.10.27",
+        "released_at": "2026-11-11T12:05:35Z",
+        "release_url": "https://github.com/miabi-io/miabi/releases/tag/v1.10.27",
         "reason": "bugfix",
-        "image": "miabi/miabi:1.10.26",
+        "image": "miabi/miabi:1.10.27",
         "components": {
           "agent": "0.6.2",
-          "cli": "0.22.0",
-          "gateway": "1.2.0",
+          "cli": "0.23.0",
+          "gateway": "1.2.1",
           "runner": "0.2.0"
         }
       }
