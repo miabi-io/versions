@@ -2,14 +2,14 @@
   "$schema": "https://versions.miabi.io/schema/v1.json",
   "component": "miabi",
   "stable": {
-    "version": "1.10.31",
-    "released_at": "2026-11-22T17:44:14Z",
-    "release_url": "https://github.com/miabi-io/miabi/releases/tag/v1.10.31",
+    "version": "1.10.32",
+    "released_at": "2026-11-25T08:01:18Z",
+    "release_url": "https://github.com/miabi-io/miabi/releases/tag/v1.10.32",
     "reason": "bugfix",
-    "image": "miabi/miabi:1.10.31",
+    "image": "miabi/miabi:1.10.32",
     "components": {
       "agent": "0.6.2",
-      "cli": "0.26.0",
+      "cli": "0.26.1",
       "gateway": "1.2.2",
       "runner": "0.2.0"
     }
